@@ -1,5 +1,5 @@
 {
-  "name": "u-wave-client-parse-chat-markup",
+  "name": "u-wave-parse-chat-markup",
   "version": "1.0.0",
   "description": "Abstract chat parser for üWave client applications.",
   "license": "MIT",
