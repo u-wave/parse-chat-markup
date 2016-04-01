@@ -8,13 +8,13 @@ Chat markup parser for üWave client applications.
 ## Installation
 
 ```
-npm install --save @u-wave/parse-chat-markup
+npm install --save u-wave-parse-chat-markup
 ```
 
 ## Usage
 
 ```js
-import parseChatMarkup from '@u-wave/parse-chat-markup';
+import parseChatMarkup from 'u-wave-parse-chat-markup';
 
 const tree = parseChatMarkup('This is a *test* _message_, with some ~MARKUP~');
 // tree =
