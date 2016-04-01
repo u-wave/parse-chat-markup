@@ -10,6 +10,7 @@
   "bugs": "https://github.com/u-wave/parse-chat-markup/issues",
   "homepage": "https://github.com/u-wave/parse-chat-markup#readme",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "babel --out-dir lib src",
     "test:lint": "eslint src",
     "test": "mocha --compilers js:babel-register test.js && npm run test:lint"
