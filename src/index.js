@@ -6,18 +6,31 @@ function Token(type, text, raw = text) {
   this.raw = raw;
 }
 
-function tokenize(text) {
+function tokenize(text, opts = {}) {
   let chunk;
   let i = 0;
   const tokens = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
-  const delimited = (delim, type) => {
-    if (chunk[0] === delim && chunk[1] !== delim) {
-      const end = chunk.indexOf(delim, 1);
-      if (end !== -1) {
+  const delimited = (start, endRx, type) => {
+    if (chunk[0] === start && chunk[1] !== start) {
+      const end = 1 + chunk.slice(1).search(endRx);
+      if (end) {
         tokens.push(new Token(type, chunk.slice(1, end)));
         i += end + 1;
+        return true;
+      }
+    }
+    return false;
+  };
+  const emoji = (type, emojiNames) => {
+    const match = /^:(\w+):/.exec(chunk);
+    if (match) {
+      // if a whitelist of emoji names is given, only accept emoji from that
+      // list.
+      if (!emojiNames || emojiNames.indexOf(match[1]) !== -1) {
+        tokens.push(new Token(type, match[1], match[0]));
+        i += match[0].length;
         return true;
       }
     }
@@ -60,10 +73,11 @@ function tokenize(text) {
   chunk = text;
   while (chunk) {
     const found =
-      delimited('_', 'italic') ||
-      delimited('*', 'bold') ||
-      delimited('`', 'code') ||
-      delimited('~', 'strike') ||
+      emoji('emoji', opts.emojiNames) ||
+      delimited('_', /_(\W|$)/, 'italic') ||
+      delimited('*', /\*(\W|$)/, 'bold') ||
+      delimited('`', /`(\W|$)/, 'code') ||
+      delimited('~', /~(\W|$)/, 'strike') ||
       mention('@', 'mention') ||
       link('link');
     if (!found) {
@@ -90,7 +104,7 @@ function tokenize(text) {
 //  * users: User objects that can be mentioned.
 function parse(message, opts) {
   const { users } = opts;
-  return tokenize(message).map(token => {
+  return tokenize(message, opts).map(token => {
     switch (token.type) {
       case 'italic':
         return { type: 'italic', content: parse(token.text, opts) };
@@ -100,6 +114,8 @@ function parse(message, opts) {
         return { type: 'code', content: [token.text] };
       case 'strike':
         return { type: 'strike', content: parse(token.text, opts) };
+      case 'emoji':
+        return { type: 'emoji', name: token.text };
       case 'mention': {
         const mention = users && find(users, user => user.username === token.text);
         return mention

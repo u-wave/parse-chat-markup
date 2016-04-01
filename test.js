@@ -76,4 +76,43 @@ describe('utils/parseChatMarkup', () => {
       ]);
     });
   });
+
+  describe('emoji', () => {
+    it('parses :emoji:-style emoji', () => {
+      expect(parseChatMarkup('an :emoji:!', bareOptions)).to.eql([
+        'an ',
+        { type: 'emoji', name: 'emoji' },
+        '!'
+      ]);
+
+      expect(parseChatMarkup('and :emoji_with_underscores:', bareOptions)).to.eql([
+        'and ',
+        { type: 'emoji', name: 'emoji_with_underscores' }
+      ]);
+    });
+
+    it('parses :emoji: that could also be italics', () => {
+      expect(parseChatMarkup('_it\'s :emoji_time:!', bareOptions)).to.eql([
+        '_it\'s ',
+        { type: 'emoji', name: 'emoji_time' },
+        '!'
+      ]);
+
+      expect(parseChatMarkup('_it\'s :emoji_time:!_', bareOptions)).to.eql([
+        { type: 'italic', content: [
+          'it\'s ',
+          { type: 'emoji', name: 'emoji_time' },
+          '!'
+        ] }
+      ]);
+    });
+
+    it('only parses whitelisted emoji if a whitelist is given', () => {
+      expect(parseChatMarkup(':a: :b: :c:', { emojiNames: ['b'] })).to.eql([
+        ':a: ',
+        { type: 'emoji', name: 'b' },
+        ' :c:'
+      ]);
+    });
+  });
 });
