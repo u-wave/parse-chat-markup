@@ -117,7 +117,8 @@ function parse(message, opts) {
       case 'emoji':
         return { type: 'emoji', name: token.text };
       case 'mention': {
-        const mention = users && find(users, user => user.username === token.text);
+        const ltext = token.text.toLowerCase();
+        const mention = users && find(users, user => user.username.toLowerCase() === ltext);
         return mention
           ? { type: 'mention', user: mention }
           : token.raw;
