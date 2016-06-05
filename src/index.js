@@ -24,7 +24,7 @@ function mentionRegExp(mention) {
 function tokenize(text, opts = {}) {
   let chunk;
   let i = 0;
-  const mentions = sortMentions(opts.mentions);
+  const mentions = sortMentions(opts.mentions || []);
   const tokens = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
@@ -119,8 +119,7 @@ function tokenize(text, opts = {}) {
 // Options:
 //  * mentions: Names that can be mentioned.
 function parse(message, opts = {}) {
-  const mentions = opts.mentions || [];
-  return tokenize(message, { mentions }).map(token => {
+  return tokenize(message, opts).map(token => {
     switch (token.type) {
       case 'italic':
         return { type: 'italic', content: parse(token.text, opts) };
