@@ -1,4 +1,4 @@
-const find = require('array-find');
+const escapeStringRegExp = require('escape-string-regexp');
 
 function Token(type, text, raw = text) {
   this.type = type;
@@ -6,9 +6,25 @@ function Token(type, text, raw = text) {
   this.raw = raw;
 }
 
+/**
+ * Sort users by username length. Longest usernames first.
+ *
+ * @param {Array.<Object>} users
+ * @return {Array.<Object>}
+ */
+
+function sortMentions(mentions) {
+  return mentions.slice().sort((a, b) => b.length - a.length);
+}
+
+function mentionRegExp(mention) {
+  return new RegExp(`^${escapeStringRegExp(mention)}\\b`, 'i');
+}
+
 function tokenize(text, opts = {}) {
   let chunk;
   let i = 0;
+  const mentions = sortMentions(opts.mentions);
   const tokens = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
@@ -38,16 +54,16 @@ function tokenize(text, opts = {}) {
   };
   const mention = (start, type) => {
     if (chunk[0] === start) {
-      let end = chunk.indexOf(' ');
-      if (end === 1) {
-        return false;
+      const maybeMention = chunk.slice(1);
+      for (let mi = 0, ml = mentions.length; mi < ml; mi++) {
+        const candidate = mentions[mi];
+        if (mentionRegExp(candidate).test(maybeMention)) {
+          const end = candidate.length + 1;
+          tokens.push(new Token(type, chunk.slice(1, end), chunk.slice(0, end)));
+          i += end;
+          return true;
+        }
       }
-      if (end === -1) {
-        end = chunk.length;
-      }
-      tokens.push(new Token(type, chunk.slice(1, end), chunk.slice(0, end)));
-      i += end;
-      return true;
     }
     return false;
   };
@@ -101,10 +117,10 @@ function tokenize(text, opts = {}) {
 
 // Parses a chat message into a tree-ish structure.
 // Options:
-//  * users: User objects that can be mentioned.
-function parse(message, opts) {
-  const { users } = opts;
-  return tokenize(message, opts).map(token => {
+//  * mentions: Names that can be mentioned.
+function parse(message, opts = {}) {
+  const mentions = opts.mentions || [];
+  return tokenize(message, { mentions }).map(token => {
     switch (token.type) {
       case 'italic':
         return { type: 'italic', content: parse(token.text, opts) };
@@ -116,13 +132,8 @@ function parse(message, opts) {
         return { type: 'strike', content: parse(token.text, opts) };
       case 'emoji':
         return { type: 'emoji', name: token.text };
-      case 'mention': {
-        const ltext = token.text.toLowerCase();
-        const mention = users && find(users, user => user.username.toLowerCase() === ltext);
-        return mention
-          ? { type: 'mention', user: mention }
-          : token.raw;
-      }
+      case 'mention':
+        return { type: 'mention', mention: token.text.toLowerCase(), raw: token.text };
       case 'link':
         return { type: 'link', text: token.text, href: token.text };
       default:

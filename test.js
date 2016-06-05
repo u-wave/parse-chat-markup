@@ -115,4 +115,41 @@ describe('utils/parseChatMarkup', () => {
       ]);
     });
   });
+
+  describe('mentions', () => {
+    const mentions = [
+      'testOne',
+      'testTwo',
+      'testOneTwo'
+    ];
+
+    it('parses @-mentions', () => {
+      expect(parseChatMarkup('hello @testOne', { mentions })).to.eql([
+        'hello ',
+        { type: 'mention', mention: 'testone', raw: 'testOne' }
+      ]);
+
+      expect(parseChatMarkup('@testOne hello', { mentions })).to.eql([
+        { type: 'mention', mention: 'testone', raw: 'testOne' },
+        ' hello',
+      ]);
+
+      expect(parseChatMarkup('hello @testOne!!', { mentions })).to.eql([
+        'hello ',
+        { type: 'mention', mention: 'testone', raw: 'testOne' },
+        '!!'
+      ]);
+    });
+
+    it('does not parse @-mentions that only contain part of a name', () => {
+      expect(parseChatMarkup('@testOneTwo', { mentions })).to.eql([
+        { type: 'mention', mention: 'testonetwo', raw: 'testOneTwo' }
+      ]);
+
+      // User "testOne" should _not_ match.
+      expect(parseChatMarkup('@testOneThree', { mentions })).to.eql([
+        '@testOneThree'
+      ]);
+    });
+  });
 });

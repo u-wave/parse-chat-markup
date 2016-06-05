@@ -33,7 +33,7 @@ const tree = parseChatMarkup('This is a *test* _message_, with some ~MARKUP~');
  - `Monospace` using ``` `backticks` ```
  - <strike>Strikethrough</strike> using `~tildes~`
  - Emoji :smile: using `:colons:`
- - User @-mentions using `@at-signs`
+ - @-mentions using `@at-signs`
 
 ## API
 
@@ -45,9 +45,7 @@ parseChatMarkup(text, options={})
 
 Available options are:
 
- - `users` - Array of user objects that can be mentioned. User objects have to
-   have a `.username` property, which will be used to match `@username`
-   mentions.
+ - `mentions` - Array of (user)names that can be @-mentioned.
 
  - `emojiNames` - Array of available :emoji: names, as strings, and without
    colons. If an emoji name is not in this array, it's not parsed. For example:
@@ -70,19 +68,16 @@ some tokens contain token arrays, too.
 Example return value:
 
 ```js
-const exampleUser = {
-  username: 'You'
-};
 parseChatMarkup(
   '@You This _is a ~bunch~ of *test markup* :sparkles:_. ' +
   '`Code blocks *do not nest*.` :not_an_emoji:',
   {
-    users: [exampleUser],
+    mentions: ['You'],
     emojiNames: ['sparkles']
   }
 );
 // →
-[ { type: 'mention', user: { username: 'You',  } },
+[ { type: 'mention', mention: 'You' },
   'This ',
   { type: 'italic', content: [
     'is a ',
@@ -105,7 +100,7 @@ Quick list of token types:
 | strike | `.content` - token array |
 | code | `.content` - token array |
 | emoji | `.name` - emoji name |
-| mention | `.user` - user object |
+| mention | `.mention` - mentioned name, lowercase |
 | link | `.text` - displayed text, `.href` - link URL |
 
 ## License

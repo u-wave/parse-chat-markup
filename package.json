@@ -6,7 +6,9 @@
   "author": "Renée Kooi <renee@kooi.me>",
   "main": "lib/index.js",
   "repository": "u-wave/parse-chat-markup",
-  "keywords": ["u-wave"],
+  "keywords": [
+    "u-wave"
+  ],
   "bugs": "https://github.com/u-wave/parse-chat-markup/issues",
   "homepage": "https://github.com/u-wave/parse-chat-markup#readme",
   "scripts": {
@@ -16,7 +18,7 @@
     "test": "mocha --compilers js:babel-register test.js && npm run test:lint"
   },
   "dependencies": {
-    "array-find": "^1.0.0"
+    "escape-string-regexp": "^1.0.5"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
