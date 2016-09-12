@@ -89,6 +89,11 @@ describe('utils/parseChatMarkup', () => {
         'and ',
         { type: 'emoji', name: 'emoji_with_underscores' }
       ]);
+
+      expect(parseChatMarkup('and :emoji-with-dashes+pluses:', bareOptions)).to.eql([
+        'and ',
+        { type: 'emoji', name: 'emoji-with-dashes+pluses' }
+      ]);
     });
 
     it('parses :emoji: that could also be italics', () => {

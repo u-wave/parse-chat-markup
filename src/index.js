@@ -40,7 +40,7 @@ function tokenize(text, opts = {}) {
     return false;
   };
   const emoji = (type, emojiNames) => {
-    const match = /^:(\w+):/.exec(chunk);
+    const match = /^:([A-Za-z0-9_+-]+):/.exec(chunk);
     if (match) {
       // if a whitelist of emoji names is given, only accept emoji from that
       // list.
