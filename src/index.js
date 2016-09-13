@@ -18,7 +18,7 @@ function sortMentions(mentions) {
 }
 
 function mentionRegExp(mention) {
-  return new RegExp(`^${escapeStringRegExp(mention)}\\b`, 'i');
+  return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s)`, 'i');
 }
 
 function tokenize(text, opts = {}) {

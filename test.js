@@ -156,5 +156,14 @@ describe('utils/parseChatMarkup', () => {
         '@testOneThree'
       ]);
     });
+
+    it('parses @-mentions with punctuation in them', () => {
+      expect(parseChatMarkup('@user[AFK] hello!', {
+        mentions: ['user[AFK]']
+      })).to.eql([
+        { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
+        ' hello!'
+      ]);
+    });
   });
 });
