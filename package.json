@@ -15,7 +15,9 @@
     "prepublish": "npm run build",
     "build": "babel --out-dir lib src",
     "test:lint": "eslint src",
-    "test": "mocha --compilers js:babel-register test.js && npm run test:lint"
+    "test:mocha": "mocha --compilers js:babel-register test.js",
+    "cov": "nyc npm run test:mocha",
+    "test": "npm run cov && npm run test:lint"
   },
   "dependencies": {
     "escape-string-regexp": "^1.0.5"
@@ -27,6 +29,7 @@
     "chai": "^3.5.0",
     "eslint": "^2.4.0",
     "eslint-config-airbnb": "^6.1.0",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "nyc": "^8.3.0"
   }
 }
