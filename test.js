@@ -77,6 +77,19 @@ describe('utils/parseChatMarkup', () => {
     });
   });
 
+  describe('urls', () => {
+    it('parses links', () => {
+      expect(parseChatMarkup('https://hoi.com/')).to.eql([
+        { type: 'link', href: 'https://hoi.com/', text: 'https://hoi.com/' }
+      ]);
+
+      expect(parseChatMarkup('something about http://hoi.com/')).to.eql([
+        'something about ',
+        { type: 'link', href: 'http://hoi.com/', text: 'http://hoi.com/' }
+      ]);
+    });
+  });
+
   describe('emoji', () => {
     it('parses :emoji:-style emoji', () => {
       expect(parseChatMarkup('an :emoji:!', bareOptions)).to.eql([
