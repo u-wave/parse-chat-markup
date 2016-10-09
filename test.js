@@ -177,6 +177,13 @@ describe('utils/parseChatMarkup', () => {
         { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
         ' hello!'
       ]);
+
+      expect(parseChatMarkup('hello @user[AFK]', {
+        mentions: ['user[AFK]']
+      })).to.eql([
+        'hello ',
+        { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' }
+      ]);
     });
   });
 });
