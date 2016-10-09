@@ -1,3 +1,8 @@
+2.0.3 / 2016-10-09
+==================
+
+ * Fix parsing of mentions ending in punctuation at the very end of a message.
+
 2.0.2 / 2016-10-03
 ==================
 
