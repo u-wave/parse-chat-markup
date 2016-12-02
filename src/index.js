@@ -55,7 +55,7 @@ function tokenize(text, opts = {}) {
   const mention = (start, type) => {
     if (chunk[0] === start) {
       const maybeMention = chunk.slice(1);
-      for (let mi = 0, ml = mentions.length; mi < ml; mi++) {
+      for (let mi = 0, ml = mentions.length; mi < ml; mi += 1) {
         const candidate = mentions[mi];
         if (mentionRegExp(candidate).test(maybeMention)) {
           const end = candidate.length + 1;
@@ -67,7 +67,7 @@ function tokenize(text, opts = {}) {
     }
     return false;
   };
-  const link = type => {
+  const link = (type) => {
     const match = /^https?:\/\/[\S]+/.exec(chunk);
     if (match) {
       tokens.push(new Token(type, chunk.slice(0, match[0].length)));
@@ -119,7 +119,7 @@ function tokenize(text, opts = {}) {
 // Options:
 //  * mentions: Names that can be mentioned.
 function parse(message, opts = {}) {
-  return tokenize(message, opts).map(token => {
+  return tokenize(message, opts).map((token) => {
     switch (token.type) {
       case 'italic':
         return { type: 'italic', content: parse(token.text, opts) };
