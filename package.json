@@ -1,6 +1,6 @@
 {
   "name": "u-wave-parse-chat-markup",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Abstract chat parser for üWave client applications.",
   "license": "MIT",
   "author": "Renée Kooi <renee@kooi.me>",
