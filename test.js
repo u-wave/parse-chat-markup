@@ -4,6 +4,11 @@ import parseChatMarkup from './src/index';
 describe('utils/parseChatMarkup', () => {
   const bareOptions = {};
 
+  it('Only accepts string inputs', () => {
+    expect(() => parseChatMarkup('some text')).not.to.throw();
+    expect(() => parseChatMarkup([ 'some', 'array' ])).to.throw(TypeError);
+  });
+
   describe('simple markup', () => {
     it('bolds things surrounded by *', () => {
       expect(parseChatMarkup('some *bold* text', bareOptions)).to.eql([

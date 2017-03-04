@@ -17,6 +17,12 @@ function sortMentions(mentions) {
   return mentions.slice().sort((a, b) => b.length - a.length);
 }
 
+/**
+ * Create a regex that matches a specific username or group being mentioned.
+ *
+ * @param {string} mention Mentionable name.
+ * @return {RegExp}
+ */
 function mentionRegExp(mention) {
   return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s|$)`, 'i');
 }
@@ -119,6 +125,10 @@ function tokenize(text, opts = {}) {
 // Options:
 //  * mentions: Names that can be mentioned.
 function parse(message, opts = {}) {
+  if (typeof message !== 'string') {
+    throw new TypeError('Expected a string');
+  }
+
   return tokenize(message, opts).map((token) => {
     switch (token.type) {
       case 'italic':
