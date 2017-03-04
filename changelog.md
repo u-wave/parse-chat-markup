@@ -1,3 +1,10 @@
+2.0.4 / 2017-03-04
+==================
+
+ * Only allow string inputs. Fixes an issue where passing an array (eg. a
+   message that was already parsed) would send `u-wave-parse-chat-markup` into
+   an infinite loop.
+
 2.0.3 / 2016-10-09
 ==================
 
