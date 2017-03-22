@@ -14,7 +14,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "babel --out-dir lib src",
-    "test:lint": "eslint src",
+    "test:lint": "eslint .",
     "test:mocha": "mocha --compilers js:babel-register test.js",
     "cov": "nyc npm run test:mocha",
     "test": "npm run cov && npm run test:lint"
