@@ -27,6 +27,27 @@ function mentionRegExp(mention) {
   return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s|$)`, 'i');
 }
 
+/**
+ * Case-insensitively get the correct emoji name from the possible emoji for an
+ * input string.
+ *
+ * @param {Array.<string>} names All possible emoji names.
+ * @param {string} match The input string.
+ * @return {string|null} The correct emoji name (including casing), or `null` if
+ *    the requested emoji does not exist.
+ */
+function findEmoji(names, match) {
+  const compare = match.toLowerCase();
+  for (let i = 0; i < names.length; i += 1) {
+    const name = names[i].toLowerCase();
+    if (name === compare) {
+      return names[i];
+    }
+  }
+
+  return null;
+}
+
 function tokenize(text, opts = {}) {
   let chunk;
   let i = 0;
@@ -50,8 +71,9 @@ function tokenize(text, opts = {}) {
     if (match) {
       // if a whitelist of emoji names is given, only accept emoji from that
       // list.
-      if (!emojiNames || emojiNames.indexOf(match[1]) !== -1) {
-        tokens.push(new Token(type, match[1], match[0]));
+      const emojiName = emojiNames ? findEmoji(emojiNames, match[1]) : match[1];
+      if (emojiName) {
+        tokens.push(new Token(type, emojiName, match[0]));
         i += match[0].length;
         return true;
       }

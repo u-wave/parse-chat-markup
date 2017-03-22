@@ -114,6 +114,19 @@ describe('utils/parseChatMarkup', () => {
       ]);
     });
 
+    it('ignores case', () => {
+      expect(parseChatMarkup(':a: :A:', { emojiNames: ['a'] })).to.eql([
+        { type: 'emoji', name: 'a' },
+        ' ',
+        { type: 'emoji', name: 'a' }
+      ]);
+      expect(parseChatMarkup(':aBC: :abc:', { emojiNames: ['ABc'] })).to.eql([
+        { type: 'emoji', name: 'ABc' },
+        ' ',
+        { type: 'emoji', name: 'ABc' }
+      ]);
+    });
+
     it('parses :emoji: that could also be italics', () => {
       expect(parseChatMarkup('_it\'s :emoji_time:!', bareOptions)).to.eql([
         '_it\'s ',
