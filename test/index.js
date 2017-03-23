@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 import { expect } from 'chai';
-import parseChatMarkup from './src/index';
+import parseChatMarkup from '../src/index';
 
 describe('utils/parseChatMarkup', () => {
   const bareOptions = {};
