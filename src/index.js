@@ -1,4 +1,5 @@
 const escapeStringRegExp = require('escape-string-regexp');
+const urlRegExp = require('url-regex');
 
 function Token(type, text, raw = text) {
   this.type = type;
@@ -95,8 +96,9 @@ function tokenize(text, opts = {}) {
     }
     return false;
   };
+  const linkRx = new RegExp(`^${urlRegExp().source}`, 'i');
   const link = (type) => {
-    const match = /^https?:\/\/[\S]+/.exec(chunk);
+    const match = linkRx.exec(chunk);
     if (match) {
       tokens.push(new Token(type, chunk.slice(0, match[0].length)));
       i += match[0].length;

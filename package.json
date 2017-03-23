@@ -20,7 +20,8 @@
     "test": "npm run cov && npm run test:lint"
   },
   "dependencies": {
-    "escape-string-regexp": "^1.0.5"
+    "escape-string-regexp": "^1.0.5",
+    "url-regex": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
