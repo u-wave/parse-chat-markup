@@ -49,7 +49,7 @@ describe('utils/parseChatMarkup', () => {
         { type: 'bold',
           content: [
             'bold ',
-          { type: 'italic', content: ['italic'] },
+            { type: 'italic', content: ['italic'] },
           ] },
       ]);
     });
@@ -70,7 +70,7 @@ describe('utils/parseChatMarkup', () => {
           content: [
             { type: 'italic',
               content: [
-            { type: 'code', content: ['monospace'] },
+                { type: 'code', content: ['monospace'] },
               ] },
           ] },
       ]);
@@ -141,7 +141,7 @@ describe('utils/parseChatMarkup', () => {
         { type: 'italic',
           content: [
             'it\'s ',
-          { type: 'emoji', name: 'emoji_time' },
+            { type: 'emoji', name: 'emoji_time' },
             '!',
           ] },
       ]);
