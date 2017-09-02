@@ -46,11 +46,13 @@ describe('utils/parseChatMarkup', () => {
 
     it('parses nested markup', () => {
       expect(parseChatMarkup('*bold _italic_*', bareOptions)).to.eql([
-        { type: 'bold',
+        {
+          type: 'bold',
           content: [
             'bold ',
             { type: 'italic', content: ['italic'] },
-          ] },
+          ],
+        },
       ]);
     });
   });
@@ -66,13 +68,17 @@ describe('utils/parseChatMarkup', () => {
 
     it('parses code blocks inside other markup', () => {
       expect(parseChatMarkup('*_`monospace`_*', bareOptions)).to.eql([
-        { type: 'bold',
+        {
+          type: 'bold',
           content: [
-            { type: 'italic',
+            {
+              type: 'italic',
               content: [
                 { type: 'code', content: ['monospace'] },
-              ] },
-          ] },
+              ],
+            },
+          ],
+        },
       ]);
     });
 
@@ -138,12 +144,14 @@ describe('utils/parseChatMarkup', () => {
       ]);
 
       expect(parseChatMarkup('_it\'s :emoji_time:!_', bareOptions)).to.eql([
-        { type: 'italic',
+        {
+          type: 'italic',
           content: [
             'it\'s ',
             { type: 'emoji', name: 'emoji_time' },
             '!',
-          ] },
+          ],
+        },
       ]);
     });
 
