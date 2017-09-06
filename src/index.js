@@ -25,7 +25,7 @@ function sortMentions(mentions) {
  * @return {RegExp}
  */
 function mentionRegExp(mention) {
-  return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s|$)`, 'i');
+  return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s|\\W|$)`, 'i');
 }
 
 /**
