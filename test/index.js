@@ -215,5 +215,15 @@ describe('utils/parseChatMarkup', () => {
         { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
       ]);
     });
+
+    it('parses @-mentions with no clear word boundary', () => {
+      expect(parseChatMarkup('hello @ReAnna!!!', {
+        mentions: ['ReAnna!!'],
+      })).to.eql([
+        'hello ',
+        { type: 'mention', mention: 'reanna!!', raw: 'ReAnna!!' },
+        '!',
+      ]);
+    });
   });
 });
