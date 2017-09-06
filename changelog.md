@@ -1,3 +1,11 @@
+2.1.0 / 2017-09-06
+==================
+
+ * Make :emoji: case insensitive.
+ * Use url-regex module for better URL matching.
+ * Fix parsing of mentions ending in punctuation, followed by punctuation, such
+   as the mention "Test!" in "@Test!!!".
+
 2.0.4 / 2017-03-04
 ==================
 
