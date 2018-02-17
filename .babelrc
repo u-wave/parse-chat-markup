@@ -1,3 +1,25 @@
 {
-  "presets": ["es2015"]
+  "env": {
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": { "node": "current" }
+        }]
+      ],
+    },
+    "es": {
+      "presets": [
+        ["env", {
+          "modules": false
+        }]
+      ]
+    },
+    "cjs": {
+      "presets": [
+        ["env", {
+          "modules": false
+        }]
+      ]
+    }
+  }
 }

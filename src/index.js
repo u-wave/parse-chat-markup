@@ -1,5 +1,5 @@
-const escapeStringRegExp = require('escape-string-regexp');
-const urlRegExp = require('url-regex');
+import escapeStringRegExp from 'escape-string-regexp';
+import urlRegExp from 'url-regex';
 
 function Token(type, text, raw = text) {
   this.type = type;
@@ -148,7 +148,7 @@ function tokenize(text, opts = {}) {
 // Parses a chat message into a tree-ish structure.
 // Options:
 //  * mentions: Names that can be mentioned.
-function parse(message, opts = {}) {
+export default function parse(message, opts = {}) {
   if (typeof message !== 'string') {
     throw new TypeError('Expected a string');
   }
@@ -174,5 +174,3 @@ function parse(message, opts = {}) {
     }
   });
 }
-
-module.exports = parse;
