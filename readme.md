@@ -1,5 +1,7 @@
 # parse-chat-markup
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/u-wave/parse-chat-markup.svg)](https://greenkeeper.io/)
+
 Chat markup parser for üWave client applications.
 
 [Installation](#installation) - [Usage](#usage) - [Supported Markup](#supported-markup) -
