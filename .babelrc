@@ -2,19 +2,19 @@
   "env": {
     "test": {
       "presets": [
-        ["env", {
+        ["@babel/preset-env", {
           "targets": { "node": "current" }
         }]
       ],
     },
     "es": {
       "presets": [
-        ["env", { "modules": false }]
+        ["@babel/preset-env", { "modules": false }]
       ]
     },
     "cjs": {
       "presets": [
-        ["env", { "modules": "commonjs" }]
+        ["@babel/preset-env", { "modules": "commonjs" }]
       ]
     }
   }

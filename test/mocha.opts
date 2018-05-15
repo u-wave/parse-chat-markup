@@ -1,1 +1,1 @@
--r babel-register
+-r @babel/register
