@@ -1,5 +1,5 @@
 import escapeStringRegExp from 'escape-string-regexp';
-import urlRegExp from 'url-regex';
+import urlRegExp from './url-regex';
 
 function Token(type, text, raw = text) {
   this.type = type;
