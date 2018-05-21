@@ -1,6 +1,6 @@
 {
   "name": "u-wave-parse-chat-markup",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Abstract chat parser for üWave client applications.",
   "license": "MIT",
   "author": "Renée Kooi <renee@kooi.me>",
@@ -24,8 +24,7 @@
     "test": "npm run cov && npm run test:lint"
   },
   "dependencies": {
-    "escape-string-regexp": "^1.0.5",
-    "url-regex": "^4.0.0"
+    "escape-string-regexp": "^1.0.5"
   },
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.47",
