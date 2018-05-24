@@ -27,7 +27,7 @@
     "escape-string-regexp": "^1.0.5"
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.47",
+    "@babel/cli": "7.0.0-beta.48",
     "@babel/core": "^7.0.0-beta.47",
     "@babel/preset-env": "7.0.0-beta.47",
     "@babel/register": "7.0.0-beta.47",
