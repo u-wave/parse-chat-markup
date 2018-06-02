@@ -6,6 +6,9 @@
           "targets": { "node": "current" }
         }]
       ],
+      "plugins": [
+        "istanbul"
+      ]
     },
     "es": {
       "presets": [
