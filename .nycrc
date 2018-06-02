@@ -5,5 +5,7 @@
   "statements": 95,
   "functions": 95,
   "reporter": ["lcov"],
-  "check-coverage": true
+  "check-coverage": true,
+  "sourceMap": false,
+  "instrument": false
 }
