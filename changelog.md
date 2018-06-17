@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.1 - 2018-06-17
+* Use loose compilation in `@babel/preset-env`.
+
 ## 2.2.0 - 2018-05-21
 * Inline url-regex module with some of its features removed. In particular,
   remove the 4KB mingz whitelist of top-level domains.
