@@ -118,14 +118,13 @@ function tokenize(text, opts = {}) {
   // tokenize text, just loop until it's done!
   chunk = text;
   while (chunk) {
-    const found =
-      emoji('emoji', opts.emojiNames) ||
-      delimited('_', /_(\W|$)/, 'italic') ||
-      delimited('*', /\*(\W|$)/, 'bold') ||
-      delimited('`', /`(\W|$)/, 'code') ||
-      delimited('~', /~(\W|$)/, 'strike') ||
-      mention('@', 'mention') ||
-      link('link');
+    const found = emoji('emoji', opts.emojiNames)
+      || delimited('_', /_(\W|$)/, 'italic')
+      || delimited('*', /\*(\W|$)/, 'bold')
+      || delimited('`', /`(\W|$)/, 'code')
+      || delimited('~', /~(\W|$)/, 'strike')
+      || mention('@', 'mention')
+      || link('link');
     if (!found) {
       let end = chunk.indexOf(' ', 1) + /* eat space */ 1;
       if (end === 0) { // no match, = -1 + 1
