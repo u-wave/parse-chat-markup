@@ -144,6 +144,13 @@ function tokenize(text, opts = {}) {
   return tokens;
 }
 
+function httpify(text) {
+  if (!/^[a-z]+:/.test(text)) {
+    return `http://${text}`;
+  }
+  return text;
+}
+
 // Parses a chat message into a tree-ish structure.
 // Options:
 //  * mentions: Names that can be mentioned.
@@ -167,7 +174,7 @@ export default function parse(message, opts = {}) {
       case 'mention':
         return { type: 'mention', mention: token.text.toLowerCase(), raw: token.text };
       case 'link':
-        return { type: 'link', text: token.text, href: token.text };
+        return { type: 'link', text: token.text, href: httpify(token.text) };
       default:
         return token.text;
     }

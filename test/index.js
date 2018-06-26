@@ -102,6 +102,12 @@ describe('utils/parseChatMarkup', () => {
         { type: 'link', href: 'http://hoi.com/', text: 'http://hoi.com/' },
       ]);
     });
+
+    it('parses www. links', () => {
+      expect(parseChatMarkup('www.test.com')).to.eql([
+        { type: 'link', href: 'http://www.test.com', text: 'www.test.com' },
+      ]);
+    });
   });
 
   describe('emoji', () => {
