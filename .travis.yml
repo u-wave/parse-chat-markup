@@ -6,5 +6,4 @@ node_js:
   - 7
   - 6
 after_script:
-  - npm i -g coveralls
-  - ./node_modules/.bin/nyc report --reporter=text-lcov | coveralls
+  - 'if [[ x$TRAVIS_NODE_VERSION == xstable ]]; then npm i -g coveralls; ./node_modules/.bin/nyc report --reporter=text-lcov | coveralls; fi'
