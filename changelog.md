@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.3.0 - 2018-07-22
+* Fix www. link hrefs.
+* Use rollup build.
+* Require 100% test coverage.
+
 ## 2.2.1 - 2018-06-17
 * Use loose compilation in `@babel/preset-env`.
 
