@@ -52,7 +52,7 @@ function findEmoji(names, match) {
   return null;
 }
 
-function tokenize(text, opts = {}) {
+function tokenize(text, opts) {
   let chunk;
   let i = 0;
   const mentions = sortMentions(opts.mentions || []);
