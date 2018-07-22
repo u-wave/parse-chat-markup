@@ -4,8 +4,8 @@
   "description": "Abstract chat parser for üWave client applications.",
   "license": "MIT",
   "author": "Renée Kooi <renee@kooi.me>",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "main": "dist/u-wave-parse-chat-markup.js",
+  "module": "dist/u-wave-parse-chat-markup.mjs",
   "jsnext:main": "src/index.js",
   "repository": "u-wave/parse-chat-markup",
   "keywords": [
@@ -15,19 +15,13 @@
   "homepage": "https://github.com/u-wave/parse-chat-markup#readme",
   "scripts": {
     "prepublish": "npm run build",
-    "build": "npm run build:es && npm run build:cjs",
-    "build:es": "cross-env BABEL_ENV=es babel --out-dir es src",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel --out-dir lib src",
+    "build": "rollup -c",
     "test:lint": "eslint .",
     "test:mocha": "cross-env BABEL_ENV=test mocha",
     "cov": "nyc npm run test:mocha",
     "test": "npm run cov && npm run test:lint"
   },
-  "dependencies": {
-    "escape-string-regexp": "^1.0.5"
-  },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.53",
     "@babel/core": "7.0.0-beta.53",
     "@babel/preset-env": "7.0.0-beta.53",
     "@babel/register": "7.0.0-beta.53",
@@ -38,6 +32,8 @@
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.8.0",
     "mocha": "^5.0.0",
-    "nyc": "^12.0.1"
+    "nyc": "^12.0.1",
+    "rollup": "^0.63.4",
+    "rollup-plugin-babel": "^4.0.0-beta.7"
   }
 }
