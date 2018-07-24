@@ -5,6 +5,11 @@ Chat markup parser for üWave client applications.
 [Installation](#installation) - [Usage](#usage) - [Supported Markup](#supported-markup) -
 [API](#api) - [License](#license)
 
+[![Build Status](https://travis-ci.org/u-wave/parse-chat-markup.svg?branch=master)](https://travis-ci.org/u-wave/parse-chat-markup)
+[![Coverage Status](https://coveralls.io/repos/github/u-wave/parse-chat-markup/badge.svg?branch=master)](https://coveralls.io/github/u-wave/parse-chat-markup?branch=master)
+[![npm](https://img.shields.io/npm/v/u-wave-parse-chat-markup.svg)](https://npmjs.com/package/u-wave-parse-chat-markup)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/u-wave-parse-chat-markup.svg)](https://bundlephobia.com/result?p=u-wave-parse-chat-markup)
+
 ## Installation
 
 ```
