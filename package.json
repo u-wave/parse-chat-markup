@@ -22,9 +22,9 @@
     "test": "npm run cov && npm run test:lint"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-rc.1",
-    "@babel/preset-env": "7.0.0-rc.1",
-    "@babel/register": "7.0.0-rc.1",
+    "@babel/core": "7.0.0-rc.3",
+    "@babel/preset-env": "7.0.0-rc.3",
+    "@babel/register": "7.0.0-rc.3",
     "babel-plugin-istanbul": "^4.1.6",
     "chai": "^4.1.2",
     "cross-env": "^5.1.3",
