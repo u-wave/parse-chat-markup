@@ -147,7 +147,7 @@ function tokenize(text: string, options: MarkupOptions) {
   const tokens: Token[] = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
-  const delimited = (start: string, endRx: RegExp, type: TokenType) => {
+  const delimited = (type: TokenType, start: string, endRx: RegExp) => {
     if (chunk[0] === start && chunk[1] !== start) {
       const end = 1 + chunk.slice(1).search(endRx);
       if (end) {
@@ -172,7 +172,7 @@ function tokenize(text: string, options: MarkupOptions) {
     }
     return false;
   };
-  const mention = (start: string, type: TokenType) => {
+  const mention = (type: TokenType, start: string) => {
     if (chunk[0] === start) {
       const maybeMention = chunk.slice(1);
       for (let mi = 0, ml = mentions.length; mi < ml; mi += 1) {
@@ -210,11 +210,11 @@ function tokenize(text: string, options: MarkupOptions) {
   chunk = text;
   while (chunk) {
     const found = emoji(TokenType.Emoji, options.emojiNames)
-      || delimited('_', /_(\W|$)/, TokenType.Italic)
-      || delimited('*', /\*(\W|$)/, TokenType.Bold)
-      || delimited('`', /`(\W|$)/, TokenType.Code)
-      || delimited('~', /~(\W|$)/, TokenType.Strike)
-      || mention('@', TokenType.Mention)
+      || delimited(TokenType.Italic, '_', /_(\W|$)/)
+      || delimited(TokenType.Bold, '*', /\*(\W|$)/)
+      || delimited(TokenType.Code, '`', /`(\W|$)/)
+      || delimited(TokenType.Strike, '~', /~(\W|$)/)
+      || mention(TokenType.Mention, '@')
       || link(TokenType.Link);
     if (!found) {
       let end = chunk.indexOf(' ', 1) + /* eat space */ 1;
