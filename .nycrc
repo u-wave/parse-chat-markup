@@ -1,11 +1,10 @@
 {
-  "include": ["src/**/*.js"],
+  "include": ["src/*.ts", "dist/*.js"],
   "lines": 100,
   "branches": 100,
   "statements": 100,
   "functions": 100,
   "reporter": ["lcov"],
   "check-coverage": true,
-  "sourceMap": false,
-  "instrument": false
+  "sourceMap": true
 }

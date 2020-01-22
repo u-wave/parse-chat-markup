@@ -1,23 +1,67 @@
 import urlRegExp from './url-regex';
 
-function escapeStringRegExp(str) {
+export type ItalicNode = {
+  type: 'italic',
+  content: MarkupNode[],
+};
+export type BoldNode = {
+  type: 'bold',
+  content: MarkupNode[],
+};
+export type CodeNode = {
+  type: 'code',
+  content: [string],
+};
+export type StrikeNode = {
+  type: 'strike',
+  content: MarkupNode[],
+};
+export type EmojiNode = {
+  type: 'emoji',
+  name: string,
+};
+export type MentionNode = {
+  type: 'mention',
+  mention: string,
+  raw: string,
+};
+export type LinkNode = {
+  type: 'link',
+  text: string,
+  href: string,
+};
+
+export type MarkupNode = string | ItalicNode | BoldNode | CodeNode | StrikeNode | EmojiNode | MentionNode | LinkNode;
+
+export type MarkupOptions = {
+  /**
+   * The names of the available :emoji: shortcodes.
+   */
+  emojiNames?: string[],
+  /**
+   * Usernames that can be mentioned.
+   */
+  mentions?: string[],
+};
+
+function escapeStringRegExp(str: string) {
   return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
 
-function Token(type, text, raw = text) {
-  this.type = type;
-  this.text = text;
-  this.raw = raw;
+interface Token {
+  type: string;
+  text: string;
+  raw: string;
+};
+
+function createToken(type: string, text: string, raw: string = text): Token {
+  return { type, text, raw};
 }
 
 /**
  * Sort users by username length. Longest usernames first.
- *
- * @param {Array.<Object>} users
- * @return {Array.<Object>}
  */
-
-function sortMentions(mentions) {
+function sortMentions(mentions: string[]): string[] {
   return mentions.slice().sort((a, b) => b.length - a.length);
 }
 
@@ -27,7 +71,7 @@ function sortMentions(mentions) {
  * @param {string} mention Mentionable name.
  * @return {RegExp}
  */
-function mentionRegExp(mention) {
+function mentionRegExp(mention: string): RegExp {
   return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s|\\W|$)`, 'i');
 }
 
@@ -40,7 +84,7 @@ function mentionRegExp(mention) {
  * @return {string|null} The correct emoji name (including casing), or `null` if
  *    the requested emoji does not exist.
  */
-function findEmoji(names, match) {
+function findEmoji(names: string[], match: string): string | null {
   const compare = match.toLowerCase();
   for (let i = 0; i < names.length; i += 1) {
     const name = names[i].toLowerCase();
@@ -52,46 +96,46 @@ function findEmoji(names, match) {
   return null;
 }
 
-function tokenize(text, opts) {
-  let chunk;
+function tokenize(text: string, opts: MarkupOptions) {
+  let chunk: string;
   let i = 0;
   const mentions = sortMentions(opts.mentions || []);
-  const tokens = [];
+  const tokens: Token[] = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
-  const delimited = (start, endRx, type) => {
+  const delimited = (start: string, endRx: RegExp, type: string) => {
     if (chunk[0] === start && chunk[1] !== start) {
       const end = 1 + chunk.slice(1).search(endRx);
       if (end) {
-        tokens.push(new Token(type, chunk.slice(1, end)));
+        tokens.push(createToken(type, chunk.slice(1, end)));
         i += end + 1;
         return true;
       }
     }
     return false;
   };
-  const emoji = (type, emojiNames) => {
+  const emoji = (type: string, emojiNames?: string[]) => {
     const match = /^:([A-Za-z0-9_+-]+):/.exec(chunk);
     if (match) {
       // if a whitelist of emoji names is given, only accept emoji from that
       // list.
       const emojiName = emojiNames ? findEmoji(emojiNames, match[1]) : match[1];
       if (emojiName) {
-        tokens.push(new Token(type, emojiName, match[0]));
+        tokens.push(createToken(type, emojiName, match[0]));
         i += match[0].length;
         return true;
       }
     }
     return false;
   };
-  const mention = (start, type) => {
+  const mention = (start: string, type: string) => {
     if (chunk[0] === start) {
       const maybeMention = chunk.slice(1);
       for (let mi = 0, ml = mentions.length; mi < ml; mi += 1) {
         const candidate = mentions[mi];
         if (mentionRegExp(candidate).test(maybeMention)) {
           const end = candidate.length + 1;
-          tokens.push(new Token(type, chunk.slice(1, end), chunk.slice(0, end)));
+          tokens.push(createToken(type, chunk.slice(1, end), chunk.slice(0, end)));
           i += end;
           return true;
         }
@@ -100,10 +144,10 @@ function tokenize(text, opts) {
     return false;
   };
   const linkRx = new RegExp(`^${urlRegExp().source}`, 'i');
-  const link = (type) => {
+  const link = (type: string) => {
     const match = linkRx.exec(chunk);
     if (match) {
-      tokens.push(new Token(type, chunk.slice(0, match[0].length)));
+      tokens.push(createToken(type, chunk.slice(0, match[0].length)));
       i += match[0].length;
       return true;
     }
@@ -114,7 +158,7 @@ function tokenize(text, opts) {
     // .slice again because `i` changed
     const m = /^\s+/.exec(text.slice(i));
     if (m) {
-      tokens.push(new Token('word', m[0]));
+      tokens.push(createToken('word', m[0]));
       i += m[0].length;
     }
   };
@@ -137,7 +181,7 @@ function tokenize(text, opts) {
       if (tokens.length > 0 && tokens[tokens.length - 1].type === 'word') {
         tokens[tokens.length - 1].text += chunk.slice(0, end);
       } else {
-        tokens.push(new Token('word', chunk.slice(0, end)));
+        tokens.push(createToken('word', chunk.slice(0, end)));
       }
       i += end;
     }
@@ -147,7 +191,7 @@ function tokenize(text, opts) {
   return tokens;
 }
 
-function httpify(text) {
+function httpify(text: string): string {
   if (!/^[a-z]+:/.test(text)) {
     return `http://${text}`;
   }
@@ -157,7 +201,7 @@ function httpify(text) {
 // Parses a chat message into a tree-ish structure.
 // Options:
 //  * mentions: Names that can be mentioned.
-export default function parse(message, opts = {}) {
+export default function parse(message: string, opts: MarkupOptions = {}): MarkupNode[] {
   if (typeof message !== 'string') {
     throw new TypeError('Expected a string');
   }

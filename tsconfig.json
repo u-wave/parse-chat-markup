@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "declaration": true,
+    "newLine": "lf",
+    "strict": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/*.ts"
+  ]
+}

@@ -1,7 +1,7 @@
-import { expect } from 'chai';
-import parseChatMarkup from '../src/index';
+const { expect } = require('chai');
+const parseChatMarkup = require('..').default;
 
-describe('utils/parseChatMarkup', () => {
+describe('parseChatMarkup', () => {
   const bareOptions = {};
 
   it('Only accepts string inputs', () => {
