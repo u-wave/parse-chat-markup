@@ -1,38 +1,71 @@
 import urlRegExp from './url-regex';
 
+/**
+ * A node of italicised text.
+ */
 export type ItalicNode = {
   type: 'italic',
   content: MarkupNode[],
 };
+
+/**
+ * A node of bold text.
+ */
 export type BoldNode = {
   type: 'bold',
   content: MarkupNode[],
 };
+
+/**
+ * A code node, containing unstyled text.
+ */
 export type CodeNode = {
   type: 'code',
   content: [string],
 };
+
+/**
+ * A node of struck-through text.
+ */
 export type StrikeNode = {
   type: 'strike',
   content: MarkupNode[],
 };
+
+/**
+ * An emoji.
+ */
 export type EmojiNode = {
   type: 'emoji',
   name: string,
 };
+
+/**
+ * A node that mentions a user.
+ */
 export type MentionNode = {
   type: 'mention',
   mention: string,
   raw: string,
 };
+
+/**
+ * A node that contains a web link.
+ */
 export type LinkNode = {
   type: 'link',
   text: string,
   href: string,
 };
 
+/**
+ * Markup node types: either raw text or one of the Node types.
+ */
 export type MarkupNode = string | ItalicNode | BoldNode | CodeNode | StrikeNode | EmojiNode | MentionNode | LinkNode;
 
+/**
+ * Options for the parser.
+ */
 export type MarkupOptions = {
   /**
    * The names of the available :emoji: shortcodes.
@@ -96,10 +129,10 @@ function findEmoji(names: string[], match: string): string | null {
   return null;
 }
 
-function tokenize(text: string, opts: MarkupOptions) {
+function tokenize(text: string, options: MarkupOptions) {
   let chunk: string;
   let i = 0;
-  const mentions = sortMentions(opts.mentions || []);
+  const mentions = sortMentions(options.mentions || []);
   const tokens: Token[] = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
@@ -165,7 +198,7 @@ function tokenize(text: string, opts: MarkupOptions) {
   // tokenize text, just loop until it's done!
   chunk = text;
   while (chunk) {
-    const found = emoji('emoji', opts.emojiNames)
+    const found = emoji('emoji', options.emojiNames)
       || delimited('_', /_(\W|$)/, 'italic')
       || delimited('*', /\*(\W|$)/, 'bold')
       || delimited('`', /`(\W|$)/, 'code')
@@ -198,24 +231,24 @@ function httpify(text: string): string {
   return text;
 }
 
-// Parses a chat message into a tree-ish structure.
-// Options:
-//  * mentions: Names that can be mentioned.
-export default function parse(message: string, opts: MarkupOptions = {}): MarkupNode[] {
+/**
+ * Parses a chat message into a tree-ish structure.
+ */
+export default function parse(message: string, options: MarkupOptions = {}): MarkupNode[] {
   if (typeof message !== 'string') {
     throw new TypeError('Expected a string');
   }
 
-  return tokenize(message, opts).map((token) => {
+  return tokenize(message, options).map((token) => {
     switch (token.type) {
       case 'italic':
-        return { type: 'italic', content: parse(token.text, opts) };
+        return { type: 'italic', content: parse(token.text, options) };
       case 'bold':
-        return { type: 'bold', content: parse(token.text, opts) };
+        return { type: 'bold', content: parse(token.text, options) };
       case 'code':
         return { type: 'code', content: [token.text] };
       case 'strike':
-        return { type: 'strike', content: parse(token.text, opts) };
+        return { type: 'strike', content: parse(token.text, options) };
       case 'emoji':
         return { type: 'emoji', name: token.text };
       case 'mention':
