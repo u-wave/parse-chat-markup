@@ -6,6 +6,7 @@
   "author": "Renée Kooi <renee@kooi.me>",
   "main": "dist/u-wave-parse-chat-markup.js",
   "module": "dist/u-wave-parse-chat-markup.mjs",
+  "types": "dist/index.d.ts",
   "repository": "u-wave/parse-chat-markup",
   "keywords": [
     "u-wave"
