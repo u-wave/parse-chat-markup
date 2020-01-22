@@ -1,7 +1,7 @@
 /**
  * Adapted from https://github.com/kevva/url-regex.
  */
-export default function urlRegex() {
+export default function urlRegex(): RegExp {
   const protocol = '(?:[a-z]+://)';
   const auth = '(?:\\S+(?::\\S*)?@)?';
   const host = '(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)';
