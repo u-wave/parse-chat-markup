@@ -22,7 +22,7 @@
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
     "rollup": "^1.29.1",
-    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-typescript2": "^0.26.0",
     "typescript": "^3.7.5"
   }
 }
