@@ -110,16 +110,6 @@ function sortMentions(mentions: string[]): string[] {
 }
 
 /**
- * Create a regex that matches a specific username or group being mentioned.
- *
- * @param {string} mention Mentionable name.
- * @return {RegExp}
- */
-function mentionRegExp(mention: string): RegExp {
-  return new RegExp(`^${escapeStringRegExp(mention)}(?:\\b|\\s|\\W|$)`, 'i');
-}
-
-/**
  * Case-insensitively get the correct emoji name from the possible emoji for an
  * input string.
  *
@@ -144,6 +134,12 @@ function tokenize(text: string, options: MarkupOptions) {
   let chunk: string;
   let i = 0;
   const mentions = sortMentions(options.mentions || []);
+  const mentionRx = new RegExp(
+    `^(${
+      mentions.map((mention) => escapeStringRegExp(mention)).join('|')
+    })(?:\\b|\\s|\\W|$)`,
+    'i',
+  );
   const tokens: Token[] = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
@@ -174,15 +170,12 @@ function tokenize(text: string, options: MarkupOptions) {
   };
   const mention = (type: TokenType, start: string) => {
     if (chunk[0] === start) {
-      const maybeMention = chunk.slice(1);
-      for (let mi = 0, ml = mentions.length; mi < ml; mi += 1) {
-        const candidate = mentions[mi];
-        if (mentionRegExp(candidate).test(maybeMention)) {
-          const end = candidate.length + 1;
-          tokens.push(createToken(type, chunk.slice(1, end), chunk.slice(0, end)));
-          i += end;
-          return true;
-        }
+      const maybeMentionable = chunk.slice(1);
+      const match = mentionRx.exec(maybeMentionable);
+      if (match) {
+        i += 1 + match[1].length;
+        tokens.push(createToken(type, match[1], chunk.slice(0, i)));
+        return true;
       }
     }
     return false;
