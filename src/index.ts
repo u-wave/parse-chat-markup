@@ -61,7 +61,15 @@ export type LinkNode = {
 /**
  * Markup node types: either raw text or one of the Node types.
  */
-export type MarkupNode = string | ItalicNode | BoldNode | CodeNode | StrikeNode | EmojiNode | MentionNode | LinkNode;
+export type MarkupNode =
+  | string
+  | ItalicNode
+  | BoldNode
+  | CodeNode
+  | StrikeNode
+  | EmojiNode
+  | MentionNode
+  | LinkNode;
 
 /**
  * Options for the parser.
@@ -83,11 +91,13 @@ export type MarkupOptions = {
 const linkRx = new RegExp(`^${urlRegExp().source}`, 'i');
 
 /**
- * Memoize a single-argument function. Remembers one (input, output) pair, and uses === equality to check if the argument has changed.
+ * Memoize a single-argument function.
+ *
+ * Remembers one (input, output) pair, and uses === equality to check if the argument has changed.
  */
 function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
-  let lastArg: void | T = undefined;
-  let lastReturn: void | R = undefined;
+  let lastArg: void | T;
+  let lastReturn: void | R;
   return (arg: T) => {
     if (arg !== lastArg) {
       lastArg = arg;
@@ -113,33 +123,30 @@ const enum TokenType {
   Mention,
   Link,
   Text,
-};
+}
 
 interface Token {
   type: TokenType;
   text: string;
   raw: string;
-};
+}
 
 function createToken(type: TokenType, text: string, raw: string = text): Token {
-  return { type, text, raw};
+  return { type, text, raw };
 }
 
 /**
  * Sort users by username length. Longest usernames first.
  */
-const sortMentions = memoize((mentions: string[]): string[] => {
-  return mentions.slice().sort((a, b) => b.length - a.length);
-});
+const sortMentions = memoize((mentions: string[]): string[] => (
+  mentions.slice().sort((a, b) => b.length - a.length)));
 
-const makeMentionRegExp = memoize((mentions: string[]): RegExp => {
-  return new RegExp(
-    `^(${
-      mentions.map((mention) => escapeStringRegExp(mention)).join('|')
-    })(?:\\b|\\s|\\W|$)`,
-    'i',
-  );
-});
+const makeMentionRegExp = memoize((mentions: string[]): RegExp => new RegExp(
+  `^(${
+    mentions.map((mention) => escapeStringRegExp(mention)).join('|')
+  })(?:\\b|\\s|\\W|$)`,
+  'i',
+));
 
 /**
  * Case-insensitively get the correct emoji name from the possible emoji for an
@@ -287,6 +294,9 @@ export default function parse(message: string, options: MarkupOptions = {}): Mar
         return { type: 'link', text: token.text, href: httpify(token.text) };
       case TokenType.Text:
         return token.text;
+      /* istanbul ignore next */
+      default:
+        throw new Error('unreachable');
     }
   });
 }
