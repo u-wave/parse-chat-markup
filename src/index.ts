@@ -1,17 +1,5 @@
 import urlRegExp from './url-regex';
 
-function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
-  let lastArg: void | T = undefined;
-  let lastReturn: void | R = undefined;
-  return (arg: T) => {
-    if (arg !== lastArg) {
-      lastArg = arg;
-      lastReturn = fn(arg);
-    }
-    return lastReturn as R;
-  };
-}
-
 /**
  * A node of italicised text.
  */
@@ -89,6 +77,29 @@ export type MarkupOptions = {
   mentions?: string[],
 };
 
+/**
+ * RegExp that matches a URL at the start of the input.
+ */
+const linkRx = new RegExp(`^${urlRegExp().source}`, 'i');
+
+/**
+ * Memoize a single-argument function. Remembers one (input, output) pair, and uses === equality to check if the argument has changed.
+ */
+function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
+  let lastArg: void | T = undefined;
+  let lastReturn: void | R = undefined;
+  return (arg: T) => {
+    if (arg !== lastArg) {
+      lastArg = arg;
+      lastReturn = fn(arg);
+    }
+    return lastReturn as R;
+  };
+}
+
+/**
+ * Escape `str` for use in a regular expression. The resulting snippet will match the input string.
+ */
 function escapeStringRegExp(str: string) {
   return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
@@ -196,7 +207,6 @@ function tokenize(text: string, options: MarkupOptions) {
     }
     return false;
   };
-  const linkRx = new RegExp(`^${urlRegExp().source}`, 'i');
   const link = (type: TokenType) => {
     const match = linkRx.exec(chunk);
     if (match) {
