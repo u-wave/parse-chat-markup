@@ -1,5 +1,17 @@
 import urlRegExp from './url-regex';
 
+function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
+  let lastArg: void | T = undefined;
+  let lastReturn: void | R = undefined;
+  return (arg: T) => {
+    if (arg !== lastArg) {
+      lastArg = arg;
+      lastReturn = fn(arg);
+    }
+    return lastReturn as R;
+  };
+}
+
 /**
  * A node of italicised text.
  */
@@ -105,9 +117,18 @@ function createToken(type: TokenType, text: string, raw: string = text): Token {
 /**
  * Sort users by username length. Longest usernames first.
  */
-function sortMentions(mentions: string[]): string[] {
+const sortMentions = memoize((mentions: string[]): string[] => {
   return mentions.slice().sort((a, b) => b.length - a.length);
-}
+});
+
+const makeMentionRegExp = memoize((mentions: string[]): RegExp => {
+  return new RegExp(
+    `^(${
+      mentions.map((mention) => escapeStringRegExp(mention)).join('|')
+    })(?:\\b|\\s|\\W|$)`,
+    'i',
+  );
+});
 
 /**
  * Case-insensitively get the correct emoji name from the possible emoji for an
@@ -134,12 +155,7 @@ function tokenize(text: string, options: MarkupOptions) {
   let chunk: string;
   let i = 0;
   const mentions = sortMentions(options.mentions || []);
-  const mentionRx = new RegExp(
-    `^(${
-      mentions.map((mention) => escapeStringRegExp(mention)).join('|')
-    })(?:\\b|\\s|\\W|$)`,
-    'i',
-  );
+  const mentionRx = makeMentionRegExp(mentions);
   const tokens: Token[] = [];
   // adds a token of type `type` if the current chunk starts with
   // a `delim`-delimited string
