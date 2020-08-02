@@ -1,31 +1,31 @@
-const { expect } = require('chai');
+const assert = require('assert');
 const parseChatMarkup = require('..').default;
 
 describe('parseChatMarkup', () => {
   const bareOptions = {};
 
   it('Only accepts string inputs', () => {
-    expect(() => parseChatMarkup('some text')).not.to.throw();
-    expect(() => parseChatMarkup(['some', 'array'])).to.throw(TypeError);
+    assert.doesNotThrow(() => parseChatMarkup('some text'));
+    assert.throws(() => parseChatMarkup(['some', 'array']), TypeError);
   });
 
   describe('simple markup', () => {
     it('bolds things surrounded by *', () => {
-      expect(parseChatMarkup('some *bold* text', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('some *bold* text', bareOptions), [
         'some ',
         { type: 'bold', content: ['bold'] },
         ' text',
       ]);
     });
     it('italicizes things surrounded by _', () => {
-      expect(parseChatMarkup('some _italic_ text', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('some _italic_ text', bareOptions), [
         'some ',
         { type: 'italic', content: ['italic'] },
         ' text',
       ]);
     });
     it('strikes through things surrounded by ~', () => {
-      expect(parseChatMarkup('some ~stroke~ text', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('some ~stroke~ text', bareOptions), [
         'some ',
         { type: 'strike', content: ['stroke'] },
         ' text',
@@ -33,19 +33,19 @@ describe('parseChatMarkup', () => {
     });
 
     it('does not parse simple markup in the middle of words', () => {
-      expect(parseChatMarkup('underscored_words are fun_!', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('underscored_words are fun_!', bareOptions), [
         'underscored_words are fun_!',
       ]);
     });
 
     it('does not parse incomplete markup', () => {
-      expect(parseChatMarkup('a * b', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('a * b', bareOptions), [
         'a * b',
       ]);
     });
 
     it('parses nested markup', () => {
-      expect(parseChatMarkup('*bold _italic_*', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('*bold _italic_*', bareOptions), [
         {
           type: 'bold',
           content: [
@@ -59,7 +59,7 @@ describe('parseChatMarkup', () => {
 
   describe('code blocks', () => {
     it('parses inline code blocks', () => {
-      expect(parseChatMarkup('some `monospace` text', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('some `monospace` text', bareOptions), [
         'some ',
         { type: 'code', content: ['monospace'] },
         ' text',
@@ -67,7 +67,7 @@ describe('parseChatMarkup', () => {
     });
 
     it('parses code blocks inside other markup', () => {
-      expect(parseChatMarkup('*_`monospace`_*', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('*_`monospace`_*', bareOptions), [
         {
           type: 'bold',
           content: [
@@ -83,7 +83,7 @@ describe('parseChatMarkup', () => {
     });
 
     it('does not parse markup inside code blocks', () => {
-      expect(parseChatMarkup('a `b *c* _d_` e', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('a `b *c* _d_` e', bareOptions), [
         'a ',
         { type: 'code', content: ['b *c* _d_'] },
         ' e',
@@ -93,18 +93,18 @@ describe('parseChatMarkup', () => {
 
   describe('urls', () => {
     it('parses links', () => {
-      expect(parseChatMarkup('https://hoi.com/')).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('https://hoi.com/'), [
         { type: 'link', href: 'https://hoi.com/', text: 'https://hoi.com/' },
       ]);
 
-      expect(parseChatMarkup('something about http://hoi.com/')).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('something about http://hoi.com/'), [
         'something about ',
         { type: 'link', href: 'http://hoi.com/', text: 'http://hoi.com/' },
       ]);
     });
 
     it('parses www. links', () => {
-      expect(parseChatMarkup('www.test.com')).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('www.test.com'), [
         { type: 'link', href: 'http://www.test.com', text: 'www.test.com' },
       ]);
     });
@@ -112,30 +112,30 @@ describe('parseChatMarkup', () => {
 
   describe('emoji', () => {
     it('parses :emoji:-style emoji', () => {
-      expect(parseChatMarkup('an :emoji:!', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('an :emoji:!', bareOptions), [
         'an ',
         { type: 'emoji', name: 'emoji' },
         '!',
       ]);
 
-      expect(parseChatMarkup('and :emoji_with_underscores:', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('and :emoji_with_underscores:', bareOptions), [
         'and ',
         { type: 'emoji', name: 'emoji_with_underscores' },
       ]);
 
-      expect(parseChatMarkup('and :emoji-with-dashes+pluses:', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('and :emoji-with-dashes+pluses:', bareOptions), [
         'and ',
         { type: 'emoji', name: 'emoji-with-dashes+pluses' },
       ]);
     });
 
     it('ignores case', () => {
-      expect(parseChatMarkup(':a: :A:', { emojiNames: ['a'] })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup(':a: :A:', { emojiNames: ['a'] }), [
         { type: 'emoji', name: 'a' },
         ' ',
         { type: 'emoji', name: 'a' },
       ]);
-      expect(parseChatMarkup(':aBC: :abc:', { emojiNames: ['ABc'] })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup(':aBC: :abc:', { emojiNames: ['ABc'] }), [
         { type: 'emoji', name: 'ABc' },
         ' ',
         { type: 'emoji', name: 'ABc' },
@@ -143,13 +143,13 @@ describe('parseChatMarkup', () => {
     });
 
     it('parses :emoji: that could also be italics', () => {
-      expect(parseChatMarkup('_it\'s :emoji_time:!', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('_it\'s :emoji_time:!', bareOptions), [
         '_it\'s ',
         { type: 'emoji', name: 'emoji_time' },
         '!',
       ]);
 
-      expect(parseChatMarkup('_it\'s :emoji_time:!_', bareOptions)).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('_it\'s :emoji_time:!_', bareOptions), [
         {
           type: 'italic',
           content: [
@@ -162,7 +162,7 @@ describe('parseChatMarkup', () => {
     });
 
     it('only parses whitelisted emoji if a whitelist is given', () => {
-      expect(parseChatMarkup(':a: :b: :c:', { emojiNames: ['b'] })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup(':a: :b: :c:', { emojiNames: ['b'] }), [
         ':a: ',
         { type: 'emoji', name: 'b' },
         ' :c:',
@@ -178,17 +178,17 @@ describe('parseChatMarkup', () => {
     ];
 
     it('parses @-mentions', () => {
-      expect(parseChatMarkup('hello @testOne', { mentions })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('hello @testOne', { mentions }), [
         'hello ',
         { type: 'mention', mention: 'testone', raw: 'testOne' },
       ]);
 
-      expect(parseChatMarkup('@testOne hello', { mentions })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('@testOne hello', { mentions }), [
         { type: 'mention', mention: 'testone', raw: 'testOne' },
         ' hello',
       ]);
 
-      expect(parseChatMarkup('hello @testOne!!', { mentions })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('hello @testOne!!', { mentions }), [
         'hello ',
         { type: 'mention', mention: 'testone', raw: 'testOne' },
         '!!',
@@ -196,36 +196,36 @@ describe('parseChatMarkup', () => {
     });
 
     it('does not parse @-mentions that only contain part of a name', () => {
-      expect(parseChatMarkup('@testOneTwo', { mentions })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('@testOneTwo', { mentions }), [
         { type: 'mention', mention: 'testonetwo', raw: 'testOneTwo' },
       ]);
 
       // User "testOne" should _not_ match.
-      expect(parseChatMarkup('@testOneThree', { mentions })).to.eql([
+      assert.deepStrictEqual(parseChatMarkup('@testOneThree', { mentions }), [
         '@testOneThree',
       ]);
     });
 
     it('parses @-mentions with punctuation in them', () => {
-      expect(parseChatMarkup('@user[AFK] hello!', {
+      assert.deepStrictEqual(parseChatMarkup('@user[AFK] hello!', {
         mentions: ['user[AFK]'],
-      })).to.eql([
+      }), [
         { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
         ' hello!',
       ]);
 
-      expect(parseChatMarkup('hello @user[AFK]', {
+      assert.deepStrictEqual(parseChatMarkup('hello @user[AFK]', {
         mentions: ['user[AFK]'],
-      })).to.eql([
+      }), [
         'hello ',
         { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
       ]);
     });
 
     it('parses @-mentions with no clear word boundary', () => {
-      expect(parseChatMarkup('hello @ReAnna!!!', {
+      assert.deepStrictEqual(parseChatMarkup('hello @ReAnna!!!', {
         mentions: ['ReAnna!!'],
-      })).to.eql([
+      }), [
         'hello ',
         { type: 'mention', mention: 'reanna!!', raw: 'ReAnna!!' },
         '!',
