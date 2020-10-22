@@ -7,12 +7,20 @@ module.exports = {
     {
       files: ['*.ts'],
       parser: '@typescript-eslint/parser',
+      plugins: [
+        '@typescript-eslint',
+      ],
       extends: [
         'airbnb-base',
         'plugin:@typescript-eslint/recommended',
       ],
       rules: {
         'import/extensions': ['error', 'never'],
+        // switch airbnb rules for typescript compatible ones
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': 'error',
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': ['error', { functions: true, classes: true, variables: true }],
       },
       settings: {
         'import/extensions': ['.js', '.ts'],
