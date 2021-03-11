@@ -16,7 +16,8 @@
   "scripts": {
     "prepare": "rollup -c",
     "lint": "eslint .",
-    "test": "npm run prepare && nyc mocha && npm run lint"
+    "test": "npm run prepare && npm run tests-only && npm run lint",
+    "tests-only": "nyc mocha"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.0.0",
