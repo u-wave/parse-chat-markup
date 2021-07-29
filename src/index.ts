@@ -261,6 +261,9 @@ function tokenize(text: string, options: MarkupOptions) {
   return tokens;
 }
 
+/**
+ * Adds `http://` to a string if it does not have a URL scheme yet.
+ */
 function httpify(text: string): string {
   if (!/^[a-z]+:/.test(text)) {
     return `http://${text}`;

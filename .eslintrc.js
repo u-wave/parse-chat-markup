@@ -39,9 +39,11 @@ module.exports = {
     },
     {
       files: ['.eslintrc.js', 'rollup.config.js', 'test/*.js'],
-      env: {
-        node: true,
-      },
+      env: { node: true },
+    },
+    {
+      files: ['test/*.js'],
+      env: { jest: true },
     },
   ],
 };
