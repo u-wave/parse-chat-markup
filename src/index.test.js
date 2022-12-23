@@ -1,5 +1,6 @@
-const assert = require('assert');
-const parseChatMarkup = require('..').default;
+import assert from 'assert';
+import { describe, it } from 'vitest';
+import parseChatMarkup from './index.ts';
 
 describe('parseChatMarkup', () => {
   const bareOptions = {};

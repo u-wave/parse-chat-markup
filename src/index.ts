@@ -297,7 +297,7 @@ export default function parse(message: string, options: MarkupOptions = {}): Mar
         return { type: 'link', text: token.text, href: httpify(token.text) };
       case TokenType.Text:
         return token.text;
-      /* istanbul ignore next */
+      /* c8 ignore next 2 */
       default:
         throw new Error('unreachable');
     }
