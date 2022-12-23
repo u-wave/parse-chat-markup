@@ -21,7 +21,7 @@ jobs:
     name: Tests
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14.x, 16.x, 18.x, 19.x]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -35,7 +35,7 @@ jobs:
       - name: Run tests
         run: npm run tests-only
       - name: Submit coverage
-        if: matrix.node-version == '16.x'
+        if: matrix.node-version == '18.x'
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
