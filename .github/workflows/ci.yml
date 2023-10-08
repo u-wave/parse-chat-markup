@@ -36,6 +36,6 @@ jobs:
         run: npm run tests-only
       - name: Submit coverage
         if: matrix.node-version == '18.x'
-        uses: coverallsapp/github-action@v1.1.2
+        uses: coverallsapp/github-action@v2.2.3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
