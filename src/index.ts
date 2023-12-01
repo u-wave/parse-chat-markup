@@ -189,7 +189,7 @@ function tokenize(text: string, options: MarkupOptions) {
     return false;
   };
   const emoji = (type: TokenType, emojiNames?: string[]) => {
-    const match = /^:([A-Za-z0-9_+-]+):/.exec(chunk);
+    const match = /^:([A-Za-z0-9_+-~]+):/.exec(chunk);
     if (match) {
       // if a whitelist of emoji names is given, only accept emoji from that
       // list.
