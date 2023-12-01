@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.5.0 - 2023-12-01
+* Accept `~` in custom emote names, to support Discord-style deduplicated names.
+
 ## 2.4.0 - 2020-01-22
 * Port to typescript, and provide type definitions.
 
