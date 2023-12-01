@@ -14,7 +14,10 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "repository": "u-wave/parse-chat-markup",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/u-wave/parse-chat-markup.git"
+  },
   "keywords": [
     "u-wave"
   ],
