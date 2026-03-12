@@ -4,16 +4,20 @@
   "description": "Abstract chat parser for üWave client applications.",
   "license": "MIT",
   "author": "Renée Kooi <renee@kooi.me>",
-  "main": "./dist/u-wave-parse-chat-markup.js",
-  "module": "./dist/u-wave-parse-chat-markup.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/u-wave-parse-chat-markup.mjs",
-      "default": "./dist/u-wave-parse-chat-markup.js"
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs",
+      "typings": {
+        "import": "./dist/index.d.mts",
+        "default": "./dist/index.d.cts"
+      }
     },
     "./package.json": "./package.json"
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.cts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/u-wave/parse-chat-markup.git"
@@ -24,7 +28,7 @@
   "bugs": "https://github.com/u-wave/parse-chat-markup/issues",
   "homepage": "https://github.com/u-wave/parse-chat-markup#readme",
   "scripts": {
-    "prepare": "rollup -c",
+    "prepare": "tsdown src/index.ts --format esm,cjs --dts",
     "lint": "eslint .",
     "test": "npm run tests-only && npm run lint",
     "tests-only": "vitest run --coverage.enabled --coverage.reporter=lcov --coverage.reporter=text --coverage.100"
@@ -36,8 +40,7 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.22.0",
-    "rollup": "^4.6.0",
-    "rollup-plugin-typescript2": "^0.36.0",
+    "tsdown": "^0.21.2",
     "typescript": "^5.0.2",
     "vitest": "^2.0.1"
   }
