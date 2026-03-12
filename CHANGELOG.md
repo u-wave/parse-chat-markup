@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.5.1 - 2026-03-12
+* Use `.mjs` and `.cjs` extensions.
+* Fix type import paths.
+
 ## 2.5.0 - 2023-12-01
 * Accept `~` in custom emote names, to support Discord-style deduplicated names.
 
