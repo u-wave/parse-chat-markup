@@ -37,7 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^8.2.0",
     "@typescript-eslint/parser": "^8.2.0",
     "@vitest/coverage-v8": "^4.1.0",
-    "eslint": "^8.2.0",
+    "eslint": "^10.8.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.22.0",
     "tsdown": "^0.22.0",
