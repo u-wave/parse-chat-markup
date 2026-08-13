@@ -144,17 +144,17 @@ describe('parseChatMarkup', () => {
     });
 
     it('parses :emoji: that could also be italics', () => {
-      assert.deepStrictEqual(parseChatMarkup('_it\'s :emoji_time:!', bareOptions), [
-        '_it\'s ',
+      assert.deepStrictEqual(parseChatMarkup("_it's :emoji_time:!", bareOptions), [
+        "_it's ",
         { type: 'emoji', name: 'emoji_time' },
         '!',
       ]);
 
-      assert.deepStrictEqual(parseChatMarkup('_it\'s :emoji_time:!_', bareOptions), [
+      assert.deepStrictEqual(parseChatMarkup("_it's :emoji_time:!_", bareOptions), [
         {
           type: 'italic',
           content: [
-            'it\'s ',
+            "it's ",
             { type: 'emoji', name: 'emoji_time' },
             '!',
           ],
@@ -208,29 +208,38 @@ describe('parseChatMarkup', () => {
     });
 
     it('parses @-mentions with punctuation in them', () => {
-      assert.deepStrictEqual(parseChatMarkup('@user[AFK] hello!', {
-        mentions: ['user[AFK]'],
-      }), [
-        { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
-        ' hello!',
-      ]);
+      assert.deepStrictEqual(
+        parseChatMarkup('@user[AFK] hello!', {
+          mentions: ['user[AFK]'],
+        }),
+        [
+          { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
+          ' hello!',
+        ],
+      );
 
-      assert.deepStrictEqual(parseChatMarkup('hello @user[AFK]', {
-        mentions: ['user[AFK]'],
-      }), [
-        'hello ',
-        { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
-      ]);
+      assert.deepStrictEqual(
+        parseChatMarkup('hello @user[AFK]', {
+          mentions: ['user[AFK]'],
+        }),
+        [
+          'hello ',
+          { type: 'mention', mention: 'user[afk]', raw: 'user[AFK]' },
+        ],
+      );
     });
 
     it('parses @-mentions with no clear word boundary', () => {
-      assert.deepStrictEqual(parseChatMarkup('hello @ReAnna!!!', {
-        mentions: ['ReAnna!!'],
-      }), [
-        'hello ',
-        { type: 'mention', mention: 'reanna!!', raw: 'ReAnna!!' },
-        '!',
-      ]);
+      assert.deepStrictEqual(
+        parseChatMarkup('hello @ReAnna!!!', {
+          mentions: ['ReAnna!!'],
+        }),
+        [
+          'hello ',
+          { type: 'mention', mention: 'reanna!!', raw: 'ReAnna!!' },
+          '!',
+        ],
+      );
     });
   });
 });
