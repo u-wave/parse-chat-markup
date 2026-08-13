@@ -139,14 +139,15 @@ function createToken(type: TokenType, text: string, raw: string = text): Token {
  * Sort users by username length. Longest usernames first.
  */
 const sortMentions = memoize((mentions: string[]): string[] => (
-  mentions.slice().sort((a, b) => b.length - a.length)));
-
-const makeMentionRegExp = memoize((mentions: string[]): RegExp => new RegExp(
-  `^(${
-    mentions.map((mention) => escapeStringRegExp(mention)).join('|')
-  })(?:\\b|\\s|\\W|$)`,
-  'i',
+  mentions.slice().sort((a, b) => b.length - a.length)
 ));
+
+const makeMentionRegExp = memoize((mentions: string[]): RegExp =>
+  new RegExp(
+    `^(${mentions.map((mention) => escapeStringRegExp(mention)).join('|')})(?:\\b|\\s|\\W|$)`,
+    'i',
+  )
+);
 
 /**
  * Case-insensitively get the correct emoji name from the possible emoji for an
