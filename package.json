@@ -34,11 +34,11 @@
     "tests-only": "vitest run --coverage.enabled --coverage.reporter=lcov --coverage.reporter=text --coverage.100"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/coverage-v8": "^5.0.0",
     "dprint": "^0.55.2",
     "oxlint": "^1.78.0",
     "tsdown": "^0.22.0",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.0"
+    "vitest": "^5.0.0"
   }
 }
