@@ -30,6 +30,11 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: ${{matrix.node-version}}
+        # https://github.com/npm/cli/issues/4819
+        # npm error Cannot read properties of null (reading 'edgesOut')
+      - name: Update npm
+        if: ${{matrix.node-version == '22.x'}}
+        run: npm install -g npm@11
       - name: Install dependencies
         run: npm install
       - name: Run tests
